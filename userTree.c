@@ -5,12 +5,12 @@ typedef struct Movie Movie;
 
 struct Movie
 {
-	int movieRating;
+	long movieRating;
 	Movie *nextMovie;
 };
 
 struct User{
-	int userId;
+	unsigned short userId;
 	Movie *firstMovie;
 	User *nextSibling, *firstKid;
 };

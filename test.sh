@@ -1,3 +1,3 @@
 #!/bin/bash
 
-gcc -Wall -Wextra -O2 -o main main.c userTree.c
+gcc -Wall -Wextra -std=c11 -O2 -o main main.c userTree.c
