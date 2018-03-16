@@ -1,12 +1,26 @@
+/*	Autor: Łukasz Zarębski
+*/
+
+#include "userTree.h"
 #include <stdio.h>
 
+void err () {
+	printf("%s\n", "ERROR");
+}
+
+void ok () {
+	printf("%s\n", "OK");
+}
+
 void addUser (unsigned int parentUserId, unsigned int userId) {
-	
-	printf("OK\n");
+
 }
 
 void delUser (unsigned int userId) {
+	if (userId == 0) err();
+	else {
 
+	}
 }
 
 void addMovie (unsigned int userId, long movieRating) {
