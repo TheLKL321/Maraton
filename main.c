@@ -35,7 +35,13 @@ void delUser (unsigned int userId) {
 }
 
 void addMovie (unsigned int userId, long movieRating) {
+	
+	User *user = userPointers[userId];
+	Movie movie = (Movie*) calloc(1, sizeof(Movie));
+	movie.movieRating = movieRating;
+	movie.nextMovie = (*user).firstMovie;
 
+	(*user).firstMovie = &movie;
 }
 
 void delMovie (unsigned int userId, long movieRating) {
