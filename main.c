@@ -14,17 +14,22 @@ void ok () {
 
 void addUser (unsigned int parentUserId, unsigned int userId) {
 
-	 User *parentUserPtr = userPointers[parentUserId];
+	if (!userPointers[userId])
+	{
+		User *parentUserPtr = userPointers[parentUserId];
 
-	 User newUser = (User*) calloc(1, sizeof(User));
-	 newUser.userId = userId;
-	 newUser.firstMovie = NULL;
-	 newUser.nextSibling = (*parentUserPtr).firstKid;
-	 newUser.firstKid = NULL;
-	 newUser.parent = parentUserPtr;
-	 userPointers[userId] = &newUser;
+		User *newUserPtr = (User*) calloc(1, sizeof(User));
+		newUserPtr->userId = userId;
+		newUserPtr->firstMovie = NULL;
+		newUserPtr->nextSibling = parentUserPtr->firstKid;
+		newUserPtr->firstKid = NULL;
+		newUserPtr->parent = parentUserPtr;
+		userPointers[userId] = newUserPtr;
 
-	 (*parentUserPtr).firstKid = &newUser;
+		(*parentUserPtr).firstKid = &newUser;
+
+		ok();
+	} else err();
 }
 
 void delUser (unsigned int userId) {
@@ -32,20 +37,48 @@ void delUser (unsigned int userId) {
 	else {
 
 	}
+
+	ok();
 }
 
 void addMovie (unsigned int userId, long movieRating) {
-	
-	User *user = userPointers[userId];
-	Movie movie = (Movie*) calloc(1, sizeof(Movie));
-	movie.movieRating = movieRating;
-	movie.nextMovie = (*user).firstMovie;
 
-	(*user).firstMovie = &movie;
+	if (!userPointers[userId]){
+		User *userPtr = userPointers[userId];
+		Movie *moviePtr = (Movie*) calloc(1, sizeof(Movie));
+		moviePtr->movieRating = movieRating;
+		moviePtr->nextMovie = userPtr->firstMovie;
+
+		userPtr->firstMovie = moviePtr;
+
+		ok();
+	} else err();
 }
 
 void delMovie (unsigned int userId, long movieRating) {
 
+	User *userPtr = userPointers[userId];
+	Movie *moviePtr = userPtr->firstMovie;
+	if (!userPtr && moviePtr){
+		if (moviePtr->movieRating == movieRating){
+			userPtr->firstMovie = moviePtr->nextMovie;
+			free(moviePtr);
+			ok();
+		} else {
+			Movie *secondMoviePtr = moviePtr->nextMovie;
+			while (secondMoviePtr){
+				if (secondMoviePtr->movieRating == movieRating){
+					moviePtr->nextMovie = secondMoviePtr->nextMovie;
+					free(secondMoviePtr);
+					ok();
+					return;
+				}
+				moviePtr = secondMoviePtr;
+				secondMoviePtr = secondMoviePtr->nextMovie;
+			}
+		}
+	}
+	err();
 }
 
 void marathon (unsigned int userId, long k) {
@@ -54,13 +87,13 @@ void marathon (unsigned int userId, long k) {
 
 int main () {
 
-	User host = (User*) calloc(1, sizeof(User));
-	host.userId = 0;
-	host.firstMovie = NULL;
-	host.nextSibling = NULL;
-	host.firstKid = NULL;
-	host.parent = NULL;
-	userPointers[0] = &host;
+	User *hostPtr = (User*) calloc(1, sizeof(User));
+	hostPtr->userId = 0;
+	hostPtr->firstMovie = NULL;
+	hostPtr->nextSibling = NULL;
+	hostPtr->firstKid = NULL;
+	hostPtr->parent = NULL;
+	userPointers[0] = hostPtr;
 
 	return 0;
 }
