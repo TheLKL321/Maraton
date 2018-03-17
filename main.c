@@ -14,6 +14,17 @@ void ok () {
 
 void addUser (unsigned int parentUserId, unsigned int userId) {
 
+	 User *parentUserPtr = userPointers[parentUserId];
+
+	 User newUser = (User*) calloc(1, sizeof(User));
+	 newUser.userId = userId;
+	 newUser.firstMovie = NULL;
+	 newUser.nextSibling = (*parentUserPtr).firstKid;
+	 newUser.firstKid = NULL;
+	 newUser.parent = parentUserPtr;
+	 userPointers[userId] = &newUser;
+
+	 (*parentUserPtr).firstKid = &newUser;
 }
 
 void delUser (unsigned int userId) {
@@ -36,5 +47,14 @@ void marathon (unsigned int userId, long k) {
 }
 
 int main () {
+
+	User host = (User*) calloc(1, sizeof(User));
+	host.userId = 0;
+	host.firstMovie = NULL;
+	host.nextSibling = NULL;
+	host.firstKid = NULL;
+	host.parent = NULL;
+	userPointers[0] = &host;
+
 	return 0;
 }

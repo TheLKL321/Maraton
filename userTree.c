@@ -12,5 +12,5 @@ struct Movie
 struct User{
 	unsigned short userId;
 	Movie *firstMovie;
-	User *nextSibling, *firstKid;
+	User *nextSibling, *firstKid, *parent;
 };
