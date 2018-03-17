@@ -6,11 +6,11 @@ typedef struct Movie Movie;
 struct Movie
 {
 	long movieRating;
-	Movie *nextMovie;
+	struct Movie *nextMovie;
 };
 
 struct User{
 	unsigned short userId;
 	Movie *firstMovie;
-	User *nextSibling, *firstKid, *parent;
+	struct User *nextSibling, *firstKid, *parent;
 };

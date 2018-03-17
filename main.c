@@ -1,9 +1,24 @@
 /*	Autor: Łukasz Zarębski
 */
 
-#include "userTree.h"
+#include "userTree.h" // already includes stdlib.h
 #include <stdio.h>
+/////// TODO: FIX THE FUCKING PIECE OF SHIT LINKING SYSTEM FUCK YOU
+typedef struct User User;
+typedef struct Movie Movie;
 
+struct Movie
+{
+	long movieRating;
+	struct Movie *nextMovie;
+};
+
+struct User{
+	unsigned short userId;
+	Movie *firstMovie;
+	struct User *nextSibling, *firstKid, *parent;
+};
+///////
 void err () {
 	printf("%s\n", "ERROR");
 }
@@ -26,7 +41,7 @@ void addUser (unsigned int parentUserId, unsigned int userId) {
 		newUserPtr->parent = parentUserPtr;
 		userPointers[userId] = newUserPtr;
 
-		(*parentUserPtr).firstKid = &newUser;
+		parentUserPtr->firstKid = newUserPtr;
 
 		ok();
 	} else err();
@@ -81,11 +96,11 @@ void delMovie (unsigned int userId, long movieRating) {
 	err();
 }
 
-void marathon (unsigned int userId, long k) {
+void marathon (unsigned int userId, long k){
 
 }
 
-int main () {
+int main() {
 
 	User *hostPtr = (User*) calloc(1, sizeof(User));
 	hostPtr->userId = 0;
