@@ -4,23 +4,6 @@
 #include "userTree.h" // already includes stdlib.h
 #include <stdio.h>
 
-/////// TODO: FIX THE FUCKING PIECE OF SHIT LINKING SYSTEM FUCK YOU
-typedef struct User User;
-typedef struct Movie Movie;
-
-struct Movie
-{
-	long movieRating;
-	struct Movie *nextMovie;
-};
-
-struct User{
-	unsigned short userId;
-	Movie *firstMovie;
-	struct User *nextSibling, *firstKid, *parent;
-};
-/////// MAKEFILE
-
 void err () {
 	fprintf(stderr,"ERROR\n");
 }
