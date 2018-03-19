@@ -3,6 +3,7 @@
 
 #include "userTree.h" // already includes stdlib.h
 #include <stdio.h>
+
 /////// TODO: FIX THE FUCKING PIECE OF SHIT LINKING SYSTEM FUCK YOU
 typedef struct User User;
 typedef struct Movie Movie;
@@ -18,13 +19,14 @@ struct User{
 	Movie *firstMovie;
 	struct User *nextSibling, *firstKid, *parent;
 };
-///////
+/////// MAKEFILE
+
 void err () {
-	printf("%s\n", "ERROR");
+	fprintf(stderr,"ERROR\n");
 }
 
 void ok () {
-	printf("%s\n", "OK");
+	printf("OK\n");
 }
 
 void addUser (unsigned int parentUserId, unsigned int userId) {
