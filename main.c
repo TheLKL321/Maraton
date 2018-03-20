@@ -1,7 +1,7 @@
 /*	Autor: Łukasz Zarębski
 */
 
-#include "userTree.h" // already includes stdlib.h and stdio.h
+#include "movieTree.h" // already includes stdlib.h and stdio.h
 
 unsigned int extractUnsignedInt (char string[]){
 
