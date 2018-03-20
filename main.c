@@ -23,28 +23,28 @@ void addUser (unsigned int parentUserId, unsigned int userId) {
 		newUserPtr->userId = userId;
 		newUserPtr->firstMovie = NULL;
 		newUserPtr->nextSibling = parentUserPtr->firstKid;
+		newUserPtr->previousSibling = NULL;
 		newUserPtr->firstKid = NULL;
-		newUserPtr->parent = parentUserPtr;
+		newUserPtr->lastKid = NULL;
+		newUserPtr->parentIfOnEdge = parentUserPtr;
 		userPointers[userId] = newUserPtr;
 
 		parentUserPtr->firstKid = newUserPtr;
+		if (!parentUserPtr->lastKid) parentUserPtr->lastKid = newUserPtr;
+
+		User *nextSiblingPtr = newUserPtr->nextSibling;
+		if (nextSiblingPtr){
+			nextSiblingPtr->previousSibling = newUserPtr;
+			if (parentUserPtr->lastKid != nextSiblingPtr) nextSiblingPtr->parentIfOnEdge = NULL;
+		}
 
 		ok();
 	} else err();
 }
 
-void delUser (unsigned int userId) {
-	if (userId == 0) err();
-	else {
-
-	}
-
-	ok();
-}
-
 void addMovie (unsigned int userId, long movieRating) {
 
-	if (!userPointers[userId]){
+	if (userPointers[userId]){
 		User *userPtr = userPointers[userId];
 		Movie *moviePtr = (Movie*) calloc(1, sizeof(Movie));
 		moviePtr->movieRating = movieRating;
@@ -90,6 +90,55 @@ void delAllMovies (Movie *firstMovie){
 	free(firstMovie);
 }
 
+void delUser (unsigned int userId) {
+
+	if (userId == 0) err();
+	else {
+		User *userPtr = userPointers[userId];
+		delAllMovies(userPtr->firstMovie);
+
+		User *parentPtr	= userPtr->parentIfOnEdge;
+		User *userFirstKidPtr = userPtr->firstKid;
+		User *userLastKidPtr = userPtr->lastKid;
+		if(parentPtr){
+			if (userPtr == parentPtr->firstKid){
+				if (userPtr == parentPtr->lastKid)
+				{
+					parentPtr->firstKid = userFirstKidPtr;
+					userFirstKidPtr->parentIfOnEdge = parentPtr;
+
+					parentPtr->lastKid = userLastKidPtr;
+					userLastKidPtr->parentIfOnEdge = parentPtr;
+				} else {
+					parentPtr->firstKid = userFirstKidPtr;
+					userFirstKidPtr->parentIfOnEdge = parentPtr;
+
+					userLastKidPtr->parentIfOnEdge = NULL;
+					userLastKidPtr->nextSibling = userPtr->nextSibling;
+					userPtr->nextSibling->previousSibling = userLastKidPtr;
+				}
+			} else {
+				parentPtr->lastKid = userLastKidPtr;
+				userLastKidPtr->parentIfOnEdge = parentPtr;
+
+				userFirstKidPtr->parentIfOnEdge = NULL;
+				userFirstKidPtr->previousSibling = userPtr->previousSibling;
+				userPtr->previousSibling->nextSibling = userFirstKidPtr;
+			}
+		} else {
+			userFirstKidPtr->parentIfOnEdge = NULL;
+			userFirstKidPtr->previousSibling = userPtr->previousSibling;
+			userPtr->previousSibling->nextSibling = userFirstKidPtr;
+
+			userLastKidPtr->parentIfOnEdge = NULL;
+			userLastKidPtr->nextSibling = userPtr->nextSibling;
+			userPtr->nextSibling->previousSibling = userLastKidPtr;
+		}
+
+		free(userPtr);
+	}
+}
+
 unsigned int extractUnsignedInt (char string[]){
 
 	char *trash;
@@ -122,8 +171,10 @@ int main() {
 	hostPtr->userId = 0;
 	hostPtr->firstMovie = NULL;
 	hostPtr->nextSibling = NULL;
+	hostPtr->previousSibling = NULL;
 	hostPtr->firstKid = NULL;
-	hostPtr->parent = NULL;
+	hostPtr->lastKid = NULL;
+	hostPtr->parentIfOnEdge = NULL;
 	userPointers[0] = hostPtr;
 
 

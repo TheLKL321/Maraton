@@ -21,7 +21,7 @@ struct Movie
 struct User{
 	unsigned short userId;
 	Movie *firstMovie;
-	struct User *nextSibling, *firstKid, *parent;
+	struct User *nextSibling, *previousSibling, *firstKid, *lastKid, *parentIfOnEdge;
 };
 
 struct User *userPointers[65535];
