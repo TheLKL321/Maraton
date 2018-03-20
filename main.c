@@ -14,7 +14,6 @@ void ok () {
 }
 
 void addUser (unsigned int parentUserId, unsigned int userId) {
-
 	if (!userPointers[userId])
 	{
 		User *parentUserPtr = userPointers[parentUserId];
@@ -43,7 +42,6 @@ void addUser (unsigned int parentUserId, unsigned int userId) {
 }
 
 void addMovie (unsigned int userId, long movieRating) {
-
 	if (userPointers[userId]){
 		User *userPtr = userPointers[userId];
 		Movie *moviePtr = (Movie*) calloc(1, sizeof(Movie));
@@ -60,6 +58,7 @@ void delMovie (unsigned int userId, long movieRating) {
 
 	User *userPtr = userPointers[userId];
 	Movie *moviePtr = userPtr->firstMovie;
+
 	if (!userPtr && moviePtr){
 		if (moviePtr->movieRating == movieRating){
 			userPtr->firstMovie = moviePtr->nextMovie;
@@ -83,7 +82,6 @@ void delMovie (unsigned int userId, long movieRating) {
 }
 
 void delAllMovies (Movie *firstMovie){
-
 	if (firstMovie->nextMovie){
 		delAllMovies (firstMovie->nextMovie);
 	}
@@ -91,14 +89,12 @@ void delAllMovies (Movie *firstMovie){
 }
 
 void connectFirstKidToSiblings (User *userPtr, User *userFirstKidPtr){
-
 	userFirstKidPtr->parentIfOnEdge = NULL;
 	userFirstKidPtr->previousSibling = userPtr->previousSibling;
 	userPtr->previousSibling->nextSibling = userFirstKidPtr;
 }
 
 void connectLastKidToSiblings (User *userPtr, User *userLastKidPtr){
-
 	userLastKidPtr->parentIfOnEdge = NULL;
 	userLastKidPtr->nextSibling = userPtr->nextSibling;
 	userPtr->nextSibling->previousSibling = userLastKidPtr;
