@@ -1,5 +1,6 @@
 #include <stdlib.h> // needed for NULL declaration
 
+//TODO: divide the module
 #ifndef USER_TREE_H_
 #define USER_TREE_H_
 
