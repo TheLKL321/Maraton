@@ -90,6 +90,30 @@ void delAllMovies (Movie *firstMovie){
 	free(firstMovie);
 }
 
+void connectFirstKidToSiblings (User *userPtr, User *userFirstKidPtr){
+
+	userFirstKidPtr->parentIfOnEdge = NULL;
+	userFirstKidPtr->previousSibling = userPtr->previousSibling;
+	userPtr->previousSibling->nextSibling = userFirstKidPtr;
+}
+
+void connectLastKidToSiblings (User *userPtr, User *userLastKidPtr){
+
+	userLastKidPtr->parentIfOnEdge = NULL;
+	userLastKidPtr->nextSibling = userPtr->nextSibling;
+	userPtr->nextSibling->previousSibling = userLastKidPtr;
+}
+
+void connectFirstKidToParent (User *userFirstKidPtr, User *parentPtr){
+	parentPtr->firstKid = userFirstKidPtr;
+	userFirstKidPtr->parentIfOnEdge = parentPtr;
+}
+
+void connectLastKidToParent (User *userLastKidPtr, User *parentPtr){
+	parentPtr->lastKid = userLastKidPtr;
+	userLastKidPtr->parentIfOnEdge = parentPtr;
+}
+
 void delUser (unsigned int userId) {
 
 	if (userId == 0) err();
@@ -100,39 +124,18 @@ void delUser (unsigned int userId) {
 		User *parentPtr	= userPtr->parentIfOnEdge;
 		User *userFirstKidPtr = userPtr->firstKid;
 		User *userLastKidPtr = userPtr->lastKid;
-		if(parentPtr){
+		if (parentPtr){
 			if (userPtr == parentPtr->firstKid){
-				if (userPtr == parentPtr->lastKid)
-				{
-					parentPtr->firstKid = userFirstKidPtr;
-					userFirstKidPtr->parentIfOnEdge = parentPtr;
-
-					parentPtr->lastKid = userLastKidPtr;
-					userLastKidPtr->parentIfOnEdge = parentPtr;
-				} else {
-					parentPtr->firstKid = userFirstKidPtr;
-					userFirstKidPtr->parentIfOnEdge = parentPtr;
-
-					userLastKidPtr->parentIfOnEdge = NULL;
-					userLastKidPtr->nextSibling = userPtr->nextSibling;
-					userPtr->nextSibling->previousSibling = userLastKidPtr;
-				}
+				connectFirstKidToParent(userFirstKidPtr, parentPtr);
+				if (userPtr == parentPtr->lastKid) connectLastKidToParent(userLastKidPtr, parentPtr);
+				else connectLastKidToSiblings(userPtr, userLastKidPtr);
 			} else {
-				parentPtr->lastKid = userLastKidPtr;
-				userLastKidPtr->parentIfOnEdge = parentPtr;
-
-				userFirstKidPtr->parentIfOnEdge = NULL;
-				userFirstKidPtr->previousSibling = userPtr->previousSibling;
-				userPtr->previousSibling->nextSibling = userFirstKidPtr;
+				connectLastKidToParent(userLastKidPtr, parentPtr);
+				connectFirstKidToSiblings(userPtr, userFirstKidPtr);
 			}
 		} else {
-			userFirstKidPtr->parentIfOnEdge = NULL;
-			userFirstKidPtr->previousSibling = userPtr->previousSibling;
-			userPtr->previousSibling->nextSibling = userFirstKidPtr;
-
-			userLastKidPtr->parentIfOnEdge = NULL;
-			userLastKidPtr->nextSibling = userPtr->nextSibling;
-			userPtr->nextSibling->previousSibling = userLastKidPtr;
+			connectFirstKidToSiblings(userPtr, userFirstKidPtr);
+			connectLastKidToSiblings(userPtr, userLastKidPtr);
 		}
 
 		free(userPtr);
