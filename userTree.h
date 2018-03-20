@@ -4,26 +4,13 @@
 #ifndef USER_TREE_H_
 #define USER_TREE_H_
 
-struct Movie;
-struct User;
+void err ();
+void createHost();
 
-
-typedef struct User User;
-typedef struct Movie Movie;
-
-
-struct Movie
-{
-	long movieRating;
-	struct Movie *nextMovie;
-};
-
-struct User{
-	unsigned short userId;
-	Movie *firstMovie;
-	struct User *nextSibling, *previousSibling, *firstKid, *lastKid, *parentIfOnEdge;
-};
-
-struct User *userPointers[65535];
+void addMovie (unsigned int userId, long movieRating);
+void delMovie (unsigned int userId, long movieRating);
+void addUser (unsigned int parentUserId, unsigned int userId);
+void delUser (unsigned int userId);
+void marathon (unsigned int userId, long k);
 
 #endif 
