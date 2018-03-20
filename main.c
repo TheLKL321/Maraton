@@ -3,6 +3,7 @@
 
 #include "userTree.h" // already includes stdlib.h
 #include <stdio.h>
+#include <stdbool.h>
 
 void err () {
 	fprintf(stderr,"ERROR\n");
@@ -81,6 +82,26 @@ void delMovie (unsigned int userId, long movieRating) {
 	err();
 }
 
+void delAllMovies (Movie *firstMovie){
+
+}
+
+bool compareString (char string1[], char string2[], int size){
+
+}
+
+unsigned int extractUnsignedInt (char string[], int size){
+
+}
+
+long extractLong (char string[], int size){
+
+}
+
+void switchFunction (char operation[], char arguments[]){
+
+}
+
 void marathon (unsigned int userId, long k){
 
 }
@@ -94,6 +115,12 @@ int main() {
 	hostPtr->firstKid = NULL;
 	hostPtr->parent = NULL;
 	userPointers[0] = hostPtr;
+
+
+	// TODO: Handle a huuuuuge int
+	// TODO: ignore # and \n
+
+  	// TODO: free all the memory
 
 	return 0;
 }
