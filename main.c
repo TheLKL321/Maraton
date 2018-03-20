@@ -83,28 +83,29 @@ void delMovie (unsigned int userId, long movieRating) {
 }
 
 void delAllMovies (Movie *firstMovie){
+
 	if (firstMovie->nextMovie){
 		delAllMovies (firstMovie->nextMovie);
 	}
 	free(firstMovie);
 }
 
-bool compareString (char string1[], char string2[], int size){
-	bool result;
-	for (int i = 0; i < size; ++i){
-		result = string1[i] == string2[i];
-	}
-	return result;
-}
-
 unsigned int extractUnsignedInt (char string[]){
+
 	char *trash;
-	return (unsigned int) strtoul(string, &trash, 10);
+	unsigned int result = (unsigned int) strtoul(string, &trash, 10);
+
+	if (trash == string) return result;
+	else return -1;
 }
 
 long extractLong (char string[]){
+
 	char *trash;
-	return (long) strtol(string, &trash, 10);
+	long result = (long) strtol(string, &trash, 10);
+
+	if (trash == string) return result;
+	else return -1;
 }
 
 void switchFunction (char operation[], char arguments[]){
