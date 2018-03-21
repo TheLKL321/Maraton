@@ -44,11 +44,28 @@ void createHost (){
 void addMovie (unsigned int userId, long movieRating) {
 	if (userPointers[userId]){
 		User *userPtr = userPointers[userId];
+
 		Movie *moviePtr = (Movie*) calloc(1, sizeof(Movie));
 		moviePtr->movieRating = movieRating;
-		moviePtr->nextMovie = userPtr->firstMovie;
 
-		userPtr->firstMovie = moviePtr;
+		Movie *tempMoviePtr = userPtr->firstMovie;
+		if (!tempMoviePtr) {
+			moviePtr->nextMovie = NULL;
+			userPtr->firstMovie = moviePtr;
+		} else if (tempMoviePtr->movieRating < movieRating){
+			moviePtr->nextMovie = tempMoviePtr;
+			userPtr->firstMovie = moviePtr;
+		} else {
+			User *nextMoviePtr = tempMoviePtr->nextMovie;
+			while (nextMoviePtr && nextMoviePtr->movieRating > movieRating){
+				tempMoviePtr = tempMoviePtr->nextMovie;
+				nextMoviePtr = tempMoviePtr->nextMovie;
+			}
+			if (nextMoviePtr->movieRating != movieRating){
+				tempMoviePtr->nextMovie = moviePtr;
+				moviePtr->nextMovie = nextMovie;
+			}
+		}
 
 		ok();
 	} else err();
