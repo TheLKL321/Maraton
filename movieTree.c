@@ -19,7 +19,7 @@ struct User{
 	struct User *nextSibling, *previousSibling, *firstKid, *lastKid, *parentIfOnEdge;
 };
 
-static User *userPointers[65535] = { NULL };
+static User *userPointers[65536] = { NULL };
 
 void err () {
 	fprintf(stderr,"ERROR\n");
