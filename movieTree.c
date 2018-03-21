@@ -15,6 +15,7 @@ struct Movie
 
 struct User{
 	unsigned short userId;
+	int kidCount;
 	Movie *firstMovie;
 	struct User *nextSibling, *previousSibling, *firstKid, *lastKid, *parentIfOnEdge;
 };
@@ -32,6 +33,7 @@ static void ok () {
 void createHost (){
 	User *hostPtr = (User*) calloc(1, sizeof(User));
 	hostPtr->userId = 0;
+	hostPtr->kidCount = 0;
 	hostPtr->firstMovie = NULL;
 	hostPtr->nextSibling = NULL;
 	hostPtr->previousSibling = NULL;
@@ -101,25 +103,27 @@ void delMovie (unsigned int userId, long movieRating) {
 void addUser (unsigned int parentUserId, unsigned int userId) {
 	if (!userPointers[userId])
 	{
-		User *parentUserPtr = userPointers[parentUserId];
+		User *parentPtr = userPointers[parentUserId];
 
 		User *newUserPtr = (User*) calloc(1, sizeof(User));
 		newUserPtr->userId = userId;
+		newUserPtr->kidCount = 0;
 		newUserPtr->firstMovie = NULL;
-		newUserPtr->nextSibling = parentUserPtr->firstKid;
+		newUserPtr->nextSibling = parentPtr->firstKid;
 		newUserPtr->previousSibling = NULL;
 		newUserPtr->firstKid = NULL;
 		newUserPtr->lastKid = NULL;
-		newUserPtr->parentIfOnEdge = parentUserPtr;
+		newUserPtr->parentIfOnEdge = parentPtr;
 		userPointers[userId] = newUserPtr;
 
-		parentUserPtr->firstKid = newUserPtr;
-		if (!parentUserPtr->lastKid) parentUserPtr->lastKid = newUserPtr;
+		parentPtr->kidCount++;
+		parentPtr->firstKid = newUserPtr;
+		if (!parentPtr->lastKid) parentPtr->lastKid = newUserPtr;
 
 		User *nextSiblingPtr = newUserPtr->nextSibling;
 		if (nextSiblingPtr){
 			nextSiblingPtr->previousSibling = newUserPtr;
-			if (parentUserPtr->lastKid != nextSiblingPtr) nextSiblingPtr->parentIfOnEdge = NULL;
+			if (parentPtr->lastKid != nextSiblingPtr) nextSiblingPtr->parentIfOnEdge = NULL;
 		}
 
 		ok();
@@ -165,6 +169,7 @@ void delUser (unsigned int userId) {
 		User *parentPtr	= userPtr->parentIfOnEdge;
 		User *userFirstKidPtr = userPtr->firstKid;
 		User *userLastKidPtr = userPtr->lastKid;
+
 		if (parentPtr){
 			if (userPtr == parentPtr->firstKid){
 				connectFirstKidToParent(userFirstKidPtr, parentPtr);
@@ -179,6 +184,7 @@ void delUser (unsigned int userId) {
 			connectLastKidToSiblings(userPtr, userLastKidPtr);
 		}
 
+		parentPtr->kidCount--;
 		free(userPtr);
 	}
 }
