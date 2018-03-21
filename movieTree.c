@@ -56,14 +56,14 @@ void addMovie (unsigned int userId, long movieRating) {
 			moviePtr->nextMovie = tempMoviePtr;
 			userPtr->firstMovie = moviePtr;
 		} else {
-			User *nextMoviePtr = tempMoviePtr->nextMovie;
+			Movie *nextMoviePtr = tempMoviePtr->nextMovie;
 			while (nextMoviePtr && nextMoviePtr->movieRating > movieRating){
 				tempMoviePtr = tempMoviePtr->nextMovie;
 				nextMoviePtr = tempMoviePtr->nextMovie;
 			}
 			if (nextMoviePtr->movieRating != movieRating){
 				tempMoviePtr->nextMovie = moviePtr;
-				moviePtr->nextMovie = nextMovie;
+				moviePtr->nextMovie = nextMoviePtr;
 			}
 		}
 
