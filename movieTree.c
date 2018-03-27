@@ -165,6 +165,7 @@ void delUser (unsigned int userId) {
 		}
 
 		parentPtr->kidCount--;
+		userPointers[userId] = NULL;
 		free(userPtr);
 	}
 }

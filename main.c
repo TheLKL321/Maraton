@@ -70,7 +70,7 @@ void switchFunction (char line[]){
 			Movie **resultListPtr = &resultList;
 			if (*resultListPtr){
 				for (int i = 0; i < k; ++i){
-					printf("%li\n", (*resultListPtr)->movieRating);
+					printf("%li ", (*resultListPtr)->movieRating);
 					resultListPtr = &((*resultListPtr)->nextMovie);
 				}
 			} else printf("%s\n", "NONE");
