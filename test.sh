@@ -2,7 +2,7 @@
 
 for f in testy/*.in
 do
-	./main <$f >${f%in}out 2>${f%in}err
+	./main <$f >${f%.in}_wyn.out 2>${f%.in}_wyn.err
 
   	if diff -w ${f%in}out ${f%.in}_wyn.out
 	then
