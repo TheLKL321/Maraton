@@ -85,7 +85,7 @@ int main() {
 
 	// TODO: ignore # and \n
 
-  	delAllUsers()
+  	delAllUsers(0);
 
 	return 0;
 }

@@ -174,15 +174,16 @@ void delAllUsers(unsigned int userId){
 
 	delAllMovies(user->firstMovie);
 
-	User *kids[kidCount] = { NULL };
-	kids[0] = user->firstKid;
-	for (int i = 1; i < kidCount; ++i){
-		kids[i] = kids[i - 1]->nextSibling;
-	}
+	User *firstKid = user->firstKid;
+	if (firstKid){
+		User *secondKid = firstKid->nextSibling;
 
-	for (int i = 0; i < kidCount; ++i)
-	{
-		delAllUsers(kids[i]->userId);
+		while(secondKid){
+			delAllUsers(firstKid->userId);
+			firstKid = secondKid;
+			secondKid = firstKid->nextSibling;
+		}
+		delAllUsers(firstKid->userId);
 	}
 
 	free(user);
