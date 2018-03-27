@@ -83,7 +83,12 @@ int main() {
 
 	createHost();
 
-	// TODO: ignore # and \n
+	char line[31];
+	while (scanf("%s", line) > 0) {
+  		if (line[0] != '#' && line[0] != '\n'){
+  			switchFunction(line);
+  		}
+  	}
 
   	delAllUsers(0);
 
