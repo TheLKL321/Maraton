@@ -40,7 +40,7 @@ addMovie 13 51
 addMovie 13 52
 addMovie 13 53
 addMovie 13 54
-marathon 1 6 
+marathon 1 6
 
 addMovie 2 100000
 addMovie 2 90000
@@ -105,16 +105,17 @@ addUser 3 3
 #no such movie
 delMovie 3 10
 
-#he already has that movie 
+#he already has that movie
 addMovie 32 10
 
 #he had this movie before he was deleted and re-added
 delMovie 2 90000
 
+#cannnot remove this user
+
 #//////////////////////////////////////////////////////
 #misc
-addUser 0 65536
-addMovie 65536 2147483647
-delMovie 65536 2147483647
-delUser 65536
-
+addUser 0 65535
+addMovie 65535 2147483647
+delMovie 65535 2147483647
+delUser 65535

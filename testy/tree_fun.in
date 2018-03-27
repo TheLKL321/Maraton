@@ -35,38 +35,35 @@ addMovie 1321 1
 addMovie 1322 2
 addMovie 1323 3
 
-addMovie 132 20
-
 addMovie 131 10
+addMovie 132 20
 addMovie 133 30
 addMovie 134 40
 
-addMovie 13 300
-
-addMovie 11 100
-addMovie 12 200
-
-addMovie 1 1000
-
-addMovie 2 2000
-addMovie 3 3000
-
-#//////////////////////////////////////
-
-marathon 132 10
 marathon 13 10
-marathon 1 10
-marathon 0 10
 
 delUser 132
 
-marathon 13 10
-marathon 1 10
-marathon 0 10
+maraton 13 10
 
-delUser 13
+#/////////////////////////////////////
+
+addMovie 11 100
+addMovie 12 200
+addMovie 13 300
 
 marathon 1 10
+
+delUser 3
+
+marathon 1 10
+
+#//////////////////////////////////////
+
+addMovie 1 1000
+addMovie 2 2000
+addMovie 3 3000
+
 marathon 0 10
 
 delUser 1
