@@ -1,5 +1,4 @@
 #include "movieTree.h"
-#include <stdio.h>
 
 static User *userPointers[65536] = { NULL };
 
@@ -111,7 +110,7 @@ void addUser (unsigned int parentUserId, unsigned int userId) {
 	} else err();
 }
 
-static void delAllMovies (Movie *firstMovie){
+void delAllMovies (Movie *firstMovie){
 	if (firstMovie->nextMovie){
 		delAllMovies (firstMovie->nextMovie);
 	}
@@ -168,6 +167,25 @@ void delUser (unsigned int userId) {
 		parentPtr->kidCount--;
 		free(userPtr);
 	}
+}
+
+void delAllUsers(unsigned int userId){
+	User *user = userPointers[userId];
+
+	delAllMovies(user->firstMovie);
+
+	User *kids[kidCount] = { NULL };
+	kids[0] = user->firstKid;
+	for (int i = 1; i < kidCount; ++i){
+		kids[i] = kids[i - 1]->nextSibling;
+	}
+
+	for (int i = 0; i < kidCount; ++i)
+	{
+		delAllUsers(kids[i]->userId);
+	}
+
+	free(user);
 }
 
 Movie *marathon (unsigned int userId, long k){

@@ -1,4 +1,5 @@
 #include <stdlib.h> // needed for NULL declaration
+#include <stdio.h>
 
 #ifndef MOVIE_TREE_H_
 #define MOVIE_TREE_H_
@@ -23,7 +24,9 @@ struct User{
 };
 
 void err ();
-void createHost();
+void createHost ();
+void delAllMovies (Movie *firstMovie);
+void delAllUsers (unsigned int userId);
 
 void addMovie (unsigned int userId, long movieRating);
 void delMovie (unsigned int userId, long movieRating);

@@ -66,7 +66,15 @@ void switchFunction (char line[]){
 		unsigned int userId = extractUnsignedInt(firstArgument);
 		long k = extractLong(strtok(NULL, " "));
 		if (userId != (unsigned int) -1 && k != -1){
-			marathon(userId, k);
+			Movie *resultList = marathon(userId, k);
+			Movie **resultListPtr = &resultList;
+			if (*resultListPtr){
+				for (int i = 0; i < k; ++i){
+					printf("%li\n", (*resultListPtr)->movieRating);
+					resultListPtr = &((*resultListPtr)->nextMovie);
+				}
+			} else printf("%s\n", "NONE");
+			delAllMovies(resultList);
 		} else err();
 	} else err();
 }
@@ -77,7 +85,7 @@ int main() {
 
 	// TODO: ignore # and \n
 
-  	// TODO: free all the memory
+  	delAllUsers()
 
 	return 0;
 }
