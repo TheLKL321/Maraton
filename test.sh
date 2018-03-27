@@ -3,7 +3,7 @@
 for f in testy/*.in
 do
 	./main <$f >${f%in}out 2>${f%in}err
-	
+
   	if diff -w ${f%in}out ${f%.in}_wyn.out
 	then
 		echo "${f%.in} out passed"
