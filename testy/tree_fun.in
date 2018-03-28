@@ -44,7 +44,7 @@ marathon 13 10
 
 delUser 132
 
-maraton 13 10
+marathon 13 10
 
 #/////////////////////////////////////
 
@@ -54,7 +54,7 @@ addMovie 13 300
 
 marathon 1 10
 
-delUser 3
+delUser 13
 
 marathon 1 10
 
