@@ -112,6 +112,7 @@ addMovie 32 10
 delMovie 2 90000
 
 #cannnot remove this user
+delUser 0
 
 #//////////////////////////////////////////////////////
 #misc
