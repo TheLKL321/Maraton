@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS= -Wall -Wextra -std=c11
+CFLAGS= -Wall -Wextra -std=c11 -g
 DEPS = userTree.h
 
 %.o: %.c $(DEPS)

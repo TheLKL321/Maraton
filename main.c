@@ -56,13 +56,13 @@ void switchFunction (char line[]){
 			addUser(parentUserId, userId);
 		} else err();
 
-	} else if (strcmp(operation, "delUser")){
+	} else if (strcmp(operation, "delUser") == 0){
 		unsigned int userId = extractUnsignedInt(firstArgument);
 		if (userId != (unsigned int) -1){
 			delUser(userId);
 		} else err();
 
-	} else if (strcmp(operation, "marathon")){
+	} else if (strcmp(operation, "marathon") == 0){
 		unsigned int userId = extractUnsignedInt(firstArgument);
 		long k = extractLong(strtok(NULL, " "));
 		if (userId != (unsigned int) -1 && k != -1){
@@ -83,8 +83,8 @@ int main() {
 
 	createHost();
 
-	char line[31];
-	while (scanf("%s", line) > 0) {
+	char line[32];
+	while (fgets(line, 32, stdin)) {
   		if (line[0] != '#' && line[0] != '\n'){
   			switchFunction(line);
   		}
