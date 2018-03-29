@@ -18,9 +18,11 @@ struct Movie
 
 struct User{
 	unsigned short userId;
-	unsigned int kidCount;
 	Movie *firstMovie;
-	struct User *nextSibling, *previousSibling, *firstKid, *lastKid, *parentIfOnEdge;
+	struct User *nextSiblingOrParent,		// Parent if this is a last kid
+				*previousSiblingOrParent,	// Parent if this is a first kid
+				*firstKid,
+				*lastKid;
 };
 
 void err ();
