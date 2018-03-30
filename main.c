@@ -5,29 +5,41 @@
 #include <errno.h>
 #include <limits.h>
 #include <string.h>
+#include <stdbool.h>
 
-// TODO: check 1337zlawartosc
 unsigned long extractUnsignedLong (char string[]){
-	char *endptr;
+	char *endPtr;
 	errno = 0;
-	unsigned long result = strtol(string, &endptr, 10);
-	if ((result == 0 && endptr == string) || (result == ULONG_MAX && errno == ERANGE))
+	unsigned long result = strtol(string, &endPtr, 10);
+	if ((result == 0 && endPtr == string) 
+		|| (result == ULONG_MAX && errno == ERANGE) 
+		|| (endPtr[0] != '\n' && endPtr[0] != ' ' && endPtr[0] != '\000'))
 	    return -1;
 	return result;
 }
 
 unsigned int extractUnsignedInt (char string[]){
 	unsigned long fullValue = extractUnsignedLong(string);
-	unsigned int result = (unsigned int) fullValue;
-	if (fullValue != (unsigned long) -1 && fullValue == result) return result;
-	else return -1;
+	if (fullValue == (unsigned long) -1 || fullValue > 65535) return -1;
+	else return (unsigned int) fullValue;
 }
 
 long extractLong (char string[]){
 	unsigned long fullValue = extractUnsignedLong(string);
-	long result = (long) fullValue;
-	if (fullValue != (unsigned long) -1 && fullValue == (unsigned long) result) return result;
-	else return -1;
+	if (fullValue == (unsigned long) -1 || fullValue > 2147483647) return -1;
+	else return (long) fullValue;
+}
+
+void finishLine(){
+	char x[1];
+	fgets(x, 1, stdin);
+	while (x[0] != '\n') fgets(x, 1, stdin);
+}
+
+bool ifContainsEndline(char string[], int size){
+	bool result = false;
+	for (int i = 0; i < size; ++i) result = result || string[i] == '\n';
+	return result;
 }
 
 void switchFunction (char line[]){
@@ -85,9 +97,12 @@ int main() {
 
 	char line[32];
 	while (fgets(line, 32, stdin)) {
-  		if (line[0] != '#' && line[0] != '\n'){
-  			switchFunction(line);
-  		}
+		if (ifContainsEndline(line, 32)){
+	  		if (line[0] != '#' && line[0] != '\n') switchFunction(line);
+		} else {
+			err();
+			finishLine();
+	  	}
   	}
 
   	delAllUsers(0);

@@ -4,6 +4,7 @@ addUse 0 111
 addUser -2 843
 addUser 0 lol
 addUser 200000 300000
+addUser 0 00
 delUser 
 3213 delUser 312
 addMovie 1337lol 312

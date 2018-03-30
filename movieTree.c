@@ -54,7 +54,7 @@ void addMovie (unsigned int userId, long movieRating) {
 				tempMoviePtr = tempMoviePtr->nextMovie;
 				nextMoviePtr = tempMoviePtr->nextMovie;
 			}
-			if (nextMoviePtr->movieRating != movieRating){
+			if (!nextMoviePtr || nextMoviePtr->movieRating != movieRating){
 				tempMoviePtr->nextMovie = moviePtr;
 				moviePtr->nextMovie = nextMoviePtr;
 			}
