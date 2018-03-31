@@ -93,7 +93,7 @@ void delMovie (unsigned int userId, long movieRating) {
 }
 
 void addUser (unsigned int parentUserId, unsigned int userId) {
-	if (!userPointers[userId])
+	if (!userPointers[userId] && userPointers[parentUserId])
 	{
 		User *parentPtr = userPointers[parentUserId];
 
@@ -131,8 +131,7 @@ void delAllMovies (Movie *firstMovie){
 
 void delUser (unsigned int userId) {
 
-	if (userId == 0) err();
-	else {
+	if (userId != 0 && userPointers[userId]){
 		User *userPtr = userPointers[userId];
 		User *leftUserPtr = userPtr->previousSiblingOrParent;
 		User *rightUserPtr = userPtr->nextSiblingOrParent;
@@ -154,7 +153,7 @@ void delUser (unsigned int userId) {
 		userPointers[userId] = NULL;
 		free(userPtr);
 		ok();
-	}
+	} else err();
 }
 
 void delAllUsers(unsigned int userId){
@@ -179,21 +178,27 @@ void delAllUsers(unsigned int userId){
 
 Movie *marathon (unsigned int userId, long k){
 	User *userPtr = userPointers[userId];
+
+	Movie *resultMovieListStart = (Movie*) calloc(1, sizeof(Movie)); // first movie is a dummy movie
+	resultMovieListStart->movieRating = -1;
+	resultMovieListStart->nextMovie = NULL;
+	Movie *resultMovieListEnd = resultMovieListStart;
+
 	unsigned int kidCount = countKids(userId);
 	Movie *movieLists[kidCount]; // an array of pointers to a current pointer to movie
-
-	Movie *nullMoviePtr = NULL;
-	Movie **resultMovieListPtr = &nullMoviePtr;
 
 	User *tempKidPtr = userPtr->firstKid;
 	for (unsigned int i = 0; i < kidCount; ++i){
 		movieLists[i] = marathon(tempKidPtr->userId, k);
 		tempKidPtr = tempKidPtr->nextSiblingOrParent;
+		Movie *tempMoviePtr = movieLists[i];
+		movieLists[i] = movieLists[i]->nextMovie;
+		free(tempMoviePtr);
 	}
 
-	Movie **userMovieListPtr = &(userPtr->firstMovie);
+	Movie *userMovieList = userPtr->firstMovie;
 	long highestRating;
-	if (*userMovieListPtr) highestRating = (*userMovieListPtr)->movieRating;
+	if (userMovieList) highestRating = (userMovieList)->movieRating;
 	else highestRating = 0;
 
 	for (long i = 0; i < k; ++i){
@@ -218,15 +223,17 @@ Movie *marathon (unsigned int userId, long k){
 		if (maxRating > highestRating){
 			Movie *bestMoviePtr = movieLists[maxI];
 			movieLists[maxI] = movieLists[maxI]->nextMovie;
-			bestMoviePtr->nextMovie = *resultMovieListPtr;
-			resultMovieListPtr = &bestMoviePtr;
-		} else if (*userMovieListPtr){
-			while(*userMovieListPtr && i < k){
+			bestMoviePtr->nextMovie = NULL;
+			resultMovieListEnd->nextMovie = bestMoviePtr;
+			resultMovieListEnd = bestMoviePtr;
+		} else if (userMovieList){
+			while(userMovieList && i < k){
 				Movie *bestMoviePtr = (Movie*) calloc(1, sizeof(Movie));
-				*bestMoviePtr = **userMovieListPtr;
-				bestMoviePtr->nextMovie = *resultMovieListPtr;
-				resultMovieListPtr = &bestMoviePtr;
-				userMovieListPtr = &((*userMovieListPtr)->nextMovie);
+				*bestMoviePtr = *userMovieList;
+				userMovieList = userMovieList->nextMovie;
+				bestMoviePtr->nextMovie = NULL;
+				resultMovieListEnd->nextMovie = bestMoviePtr;
+				resultMovieListEnd = bestMoviePtr;
 				i++;
 			}
 		} else i = k;
@@ -237,5 +244,5 @@ Movie *marathon (unsigned int userId, long k){
 		delAllMovies(movieLists[i]);
 	}
 	
-	return *resultMovieListPtr;
+	return resultMovieListStart;
 }

@@ -91,12 +91,17 @@ void switchFunction (char line[]){
 		long k = extractLong(strtok(NULL, " "));
 		if (userId != (unsigned int) -1 && k != -1 && strtok(NULL, "") == NULL){
 			Movie *resultList = marathon(userId, k);
-			Movie **resultListPtr = &resultList;
-			if (*resultListPtr){
-				for (int i = 0; i < k; ++i){
-					printf("%li ", (*resultListPtr)->movieRating);
-					resultListPtr = &((*resultListPtr)->nextMovie);
+			Movie *tempMoviePtr = resultList;
+			resultList = resultList->nextMovie;
+			free(tempMoviePtr);
+			if (resultList){
+				long i = 0;
+				while (resultList && i < k){
+					printf("%li ", resultList->movieRating);
+					resultList = resultList->nextMovie;
+					i++;
 				}
+				printf("\n");
 			} else printf("%s\n", "NONE");
 			delAllMovies(resultList);
 		} else err();
