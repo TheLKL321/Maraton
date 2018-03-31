@@ -26,9 +26,11 @@ static unsigned int countKids (unsigned int userId){
 	unsigned int result = 0;
 
 	User *tempKidPtr = userPtr->firstKid;
-	while(tempKidPtr != userPtr){
-		result++;
-		tempKidPtr = tempKidPtr->nextSiblingOrParent;
+	if (tempKidPtr){
+		while(tempKidPtr != userPtr){
+			result++;
+			tempKidPtr = tempKidPtr->nextSiblingOrParent;
+		}
 	}
 
 	return result;
@@ -179,21 +181,26 @@ Movie *marathon (unsigned int userId, long k){
 	User *userPtr = userPointers[userId];
 	unsigned int kidCount = countKids(userId);
 	Movie *movieLists[kidCount]; // an array of pointers to a current pointer to movie
-	Movie **resultMovieListPtr;
 
-	User *tempKid = userPtr->firstKid;
+	Movie *nullMoviePtr = NULL;
+	Movie **resultMovieListPtr = &nullMoviePtr;
+
+	User *tempKidPtr = userPtr->firstKid;
 	for (unsigned int i = 0; i < kidCount; ++i){
-		movieLists[i] = marathon(tempKid->userId, k);
-		tempKid = tempKid->nextSiblingOrParent;
+		movieLists[i] = marathon(tempKidPtr->userId, k);
+		tempKidPtr = tempKidPtr->nextSiblingOrParent;
 	}
 
 	Movie **userMovieListPtr = &(userPtr->firstMovie);
-	long highestRating = (*userMovieListPtr)->movieRating;
+	long highestRating;
+	if (*userMovieListPtr) highestRating = (*userMovieListPtr)->movieRating;
+	else highestRating = 0;
+
 	for (long i = 0; i < k; ++i){
 
 		unsigned int maxI;
 		long maxRating = -1;
-		for (unsigned int j = 0; j < kidCount; ++i){
+		for (unsigned int j = 0; j < kidCount; ++j){
 			Movie *tempMoviePtr;
 			tempMoviePtr = movieLists[j];
 			if (tempMoviePtr){
@@ -209,13 +216,12 @@ Movie *marathon (unsigned int userId, long k){
 		}
 
 		if (maxRating > highestRating){
-			Movie *bestMoviePtr;
-			bestMoviePtr = movieLists[maxI];
+			Movie *bestMoviePtr = movieLists[maxI];
 			movieLists[maxI] = movieLists[maxI]->nextMovie;
 			bestMoviePtr->nextMovie = *resultMovieListPtr;
 			resultMovieListPtr = &bestMoviePtr;
-		} else {
-			while(*userMovieListPtr && i<k){
+		} else if (*userMovieListPtr){
+			while(*userMovieListPtr && i < k){
 				Movie *bestMoviePtr = (Movie*) calloc(1, sizeof(Movie));
 				*bestMoviePtr = **userMovieListPtr;
 				bestMoviePtr->nextMovie = *resultMovieListPtr;
@@ -223,8 +229,9 @@ Movie *marathon (unsigned int userId, long k){
 				userMovieListPtr = &((*userMovieListPtr)->nextMovie);
 				i++;
 			}
-		}
+		} else i = k;
 	}
+	
 
 	for (unsigned int i = 0; i < kidCount; ++i){
 		delAllMovies(movieLists[i]);
