@@ -69,26 +69,28 @@ void addMovie (unsigned int userId, long movieRating) {
 void delMovie (unsigned int userId, long movieRating) {
 
 	User *userPtr = userPointers[userId];
-	Movie *moviePtr = userPtr->firstMovie;
 
-	if (userPtr && moviePtr){
-		if (moviePtr->movieRating == movieRating){
-			userPtr->firstMovie = moviePtr->nextMovie;
-			free(moviePtr);
-			ok();
-		} else {
-			Movie *secondMoviePtr = moviePtr->nextMovie;
-			while (secondMoviePtr){
-				if (secondMoviePtr->movieRating == movieRating){
-					moviePtr->nextMovie = secondMoviePtr->nextMovie;
-					free(secondMoviePtr);
-					ok();
-					return;
+	if (userPtr){
+		Movie *moviePtr = userPtr->firstMovie;
+		if (moviePtr){
+			if (moviePtr->movieRating == movieRating){
+				userPtr->firstMovie = moviePtr->nextMovie;
+				free(moviePtr);
+				ok();
+			} else {
+				Movie *secondMoviePtr = moviePtr->nextMovie;
+				while (secondMoviePtr){
+					if (secondMoviePtr->movieRating == movieRating){
+						moviePtr->nextMovie = secondMoviePtr->nextMovie;
+						free(secondMoviePtr);
+						ok();
+						return;
+					}
+					moviePtr = secondMoviePtr;
+					secondMoviePtr = secondMoviePtr->nextMovie;
 				}
-				moviePtr = secondMoviePtr;
-				secondMoviePtr = secondMoviePtr->nextMovie;
 			}
-		}
+		} else err();
 	} else err();
 }
 
@@ -183,6 +185,11 @@ Movie *marathon (unsigned int userId, long k){
 	resultMovieListStart->movieRating = -1;
 	resultMovieListStart->nextMovie = NULL;
 	Movie *resultMovieListEnd = resultMovieListStart;
+
+	if (!userPtr){
+		resultMovieListStart->movieRating = -2;
+		return resultMovieListStart;
+	}
 
 	unsigned int kidCount = countKids(userId);
 	Movie *movieLists[kidCount]; // an array of pointers to a current pointer to movie

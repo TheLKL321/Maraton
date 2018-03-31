@@ -90,20 +90,22 @@ void switchFunction (char line[]){
 		unsigned int userId = extractUnsignedInt(firstArgument);
 		long k = extractLong(strtok(NULL, " "));
 		if (userId != (unsigned int) -1 && k != -1 && strtok(NULL, "") == NULL){
-			Movie *resultList = marathon(userId, k);
-			Movie *tempMoviePtr = resultList;
-			resultList = resultList->nextMovie;
-			free(tempMoviePtr);
-			if (resultList){
-				long i = 0;
-				while (resultList && i < k){
-					printf("%li ", resultList->movieRating);
-					resultList = resultList->nextMovie;
-					i++;
-				}
-				printf("\n");
-			} else printf("%s\n", "NONE");
-			delAllMovies(resultList);
+			Movie *resultListStart = marathon(userId, k);
+			Movie *resultList = resultListStart;
+
+			if (resultList->movieRating != -2) {
+				resultList = resultList->nextMovie;
+				if (resultList){
+					long i = 0;
+					while (resultList->nextMovie && i < k - 1){
+						printf("%li ", resultList->movieRating);
+						resultList = resultList->nextMovie;
+						i++;
+					}
+					printf("%li\n", resultList->movieRating);
+				} else printf("%s\n", "NONE");
+				delAllMovies(resultListStart);
+			} else err();
 		} else err();
 	} else err();
 }
