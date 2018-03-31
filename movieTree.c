@@ -164,7 +164,7 @@ void delAllUsers(unsigned int userId){
 	if (firstKid){
 		User *secondKid = firstKid->nextSiblingOrParent;
 
-		while(secondKid){
+		while(secondKid != user){
 			delAllUsers(firstKid->userId);
 			firstKid = secondKid;
 			secondKid = firstKid->nextSiblingOrParent;

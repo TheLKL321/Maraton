@@ -10,10 +10,14 @@
 unsigned long extractUnsignedLong (char string[]){
 	char *endPtr;
 	errno = 0;
+	if (string == NULL 
+		|| (strlen(string) > 2 && string[0] == '0' && string[1] == '0')) //handle 00032132 cases
+		return -1;
+
 	unsigned long result = strtol(string, &endPtr, 10);
-	if ((result == 0 && endPtr == string) 
-		|| (result == ULONG_MAX && errno == ERANGE) 
-		|| (endPtr[0] != '\n' && endPtr[0] != ' ' && endPtr[0] != '\000'))
+	if ((result == 0 && endPtr == string) //check if anything could be read
+		|| (result == ULONG_MAX && errno == ERANGE)  //prevent range errors
+		|| (endPtr[0] != '\n' && endPtr[0] != ' ' && endPtr[0] != '\000')) //handle 3213string cases
 	    return -1;
 	return result;
 }
@@ -31,15 +35,22 @@ long extractLong (char string[]){
 }
 
 void finishLine(){
-	char x[1];
-	fgets(x, 1, stdin);
-	while (x[0] != '\n') fgets(x, 1, stdin);
+	char x = getchar();
+	while (x != '\n') x = getchar();
 }
 
-bool ifContainsEndline(char string[], int size){
-	bool result = false;
-	for (int i = 0; i < size; ++i) result = result || string[i] == '\n';
-	return result;
+// checks for length and double spaces
+bool ifCorrect(char string[]){
+	bool ifContainsEndline = false, ifContainsDoublespace = false;
+	ifContainsEndline = ifContainsEndline || string[1] == '\n';
+	for (int i = 1; i < (int) strlen(string); ++i){
+		ifContainsEndline = ifContainsEndline || string[i] == '\n';
+		ifContainsDoublespace = ifContainsDoublespace || (string[i - 1] == ' ' && string[i] == ' ');
+	} 
+
+	if (!ifContainsEndline) finishLine();
+
+	return ifContainsEndline && !ifContainsDoublespace;
 }
 
 void switchFunction (char line[]){
@@ -97,11 +108,10 @@ int main() {
 
 	char line[32];
 	while (fgets(line, 32, stdin)) {
-		if (ifContainsEndline(line, 32)){
+		if (ifCorrect(line)){
 	  		if (line[0] != '#' && line[0] != '\n') switchFunction(line);
 		} else {
 			err();
-			finishLine();
 	  	}
   	}
 
