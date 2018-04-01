@@ -95,6 +95,7 @@ void delMovie (unsigned int userId, long movieRating) {
 					moviePtr = secondMoviePtr;
 					secondMoviePtr = secondMoviePtr->nextMovie;
 				}
+				err();
 			}
 		} else err();
 	} else err();
@@ -146,10 +147,14 @@ void delUser (unsigned int userId) {
 		User *firstKidPtr = userPtr->firstKid;
 		User *lastKidPtr = userPtr->lastKid;
 		delAllMovies(userPtr->firstMovie);
+		userPtr->firstMovie = NULL;
 
 		if (firstKidPtr){
 			firstKidPtr->previousSiblingOrParent = leftUserPtr;
 			lastKidPtr->nextSiblingOrParent = rightUserPtr;
+		} else if (rightUserPtr != leftUserPtr){
+			firstKidPtr = rightUserPtr;
+			lastKidPtr = leftUserPtr;
 		}
 
 		if (leftUserPtr->firstKid == userPtr) leftUserPtr->firstKid = firstKidPtr;
@@ -212,7 +217,7 @@ Movie *marathon (unsigned int userId, long k){
 	Movie *userMovieList = userPtr->firstMovie;
 	long highestRating;
 	if (userMovieList) highestRating = (userMovieList)->movieRating;
-	else highestRating = 0;
+	else highestRating = -1;
 
 	for (long i = 0; i < k; ++i){
 
