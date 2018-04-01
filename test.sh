@@ -2,16 +2,19 @@
 
 for f in testy/*.in
 do
-	./main <$f >${f%.in}_wyn.out 2>${f%.in}_wyn.err
+	TMPFILE1="$(mktemp)"
+	TMPFILE2="$(mktemp)"
 
-  	if diff ${f%in}out ${f%.in}_wyn.out
+	./main <$f >$TMPFILE1 2>$TMPFILE2
+
+  	if diff ${f%in}out $TMPFILE1
 	then
 		echo "${f%.in} out passed"
 	else
 		echo "${f%.in} out failed"
 	fi
 
-	if diff ${f%in}err ${f%.in}_wyn.err
+	if diff ${f%in}err $TMPFILE2
 	then
 		echo "${f%.in} err passed"
 	else

@@ -1,0 +1,5 @@
+addUser 4 6
+addMovie 0 6
+addMovie 7 8
+addUser 4 6
+delMovie 5 4

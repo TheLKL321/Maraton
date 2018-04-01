@@ -1,0 +1,41 @@
+delMovie 5 2
+addMovie 4 1
+marathon 5 4
+addMovie 8 4
+marathon 5 3
+addMovie 2 7
+addUser 6 4
+marathon 3 9
+addUser 4 0
+delUser 3
+delMovie 1 5
+addMovie 5 7
+delMovie 8 7
+marathon 2 3
+delUser 6
+marathon 5 6
+marathon 3 8
+delMovie 8 6
+marathon 7 9
+marathon 5 4
+marathon 2 1
+marathon 7 0
+delMovie 4 9
+delMovie 3 6
+delUser 4
+delMovie 1 1
+delUser 7
+addMovie 0 5
+delMovie 4 9
+addMovie 2 0
+delMovie 0 0
+delUser 1
+addMovie 7 1
+delUser 0
+marathon 4 3
+addUser 3 8
+delUser 1
+delUser 1
+delMovie 4 6
+addMovie 7 6
+addUser 2 7

@@ -1,0 +1,9 @@
+delMovie 4 4
+marathon 2 8
+delMovie 7 2
+line 6 9
+delUser 5
+
+addMovie 6 4
+
+line 6 9

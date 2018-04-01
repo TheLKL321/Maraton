@@ -1,0 +1,26 @@
+addUser 5 0
+
+
+addMovie 4 0
+
+addUser 6 0
+l i n e 9 9
+line
+addMovie 6 1
+l i n e 9 9
+marathon 3 0
+marathon 5 3
+delMovie 0 1
+delUser 4
+delMovie 5 4
+
+marathon 2 4
+marathon 5 1
+marathon 2 3
+l i n e 9 9
+marathon 6 1
+delMovie 4 2
+line 6 9
+line
+# dsaads4w3 1337 2137e
+l i n e 9 9

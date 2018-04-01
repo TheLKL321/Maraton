@@ -1,0 +1,28 @@
+line 6 9
+delUser 2
+addUser 5 6
+l i n e 9 9
+addUser 4 4
+line
+delUser 5
+addMovie 0 5
+delMovie 1 6
+
+delMovie 1 0
+marathon 1 3
+l i n e 9 9
+line 6 9
+
+line 6 9
+addUser 2 0
+delMovie 3 1
+
+
+delUser 5
+delMovie 5 1
+line 6 9
+line
+
+marathon 5 4
+
+delUser 2
