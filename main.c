@@ -94,7 +94,7 @@ void switchFunction (char line[]){
 			Movie *resultList = resultListStart;
 
 			if (resultList) {
-				resultList = resultList->nextMovie;
+				resultList = resultList->nextMovie; //the first movie is a dummy
 				if (resultList){
 					long i = 0;
 					while (resultList->nextMovie && i < k - 1){
@@ -119,9 +119,7 @@ int main() {
 	while (fgets(line, 32, stdin)) {
 		if (ifCorrect(line)){
 	  		if (line[0] != '#' && line[0] != '\n') switchFunction(line);
-		} else {
-			err();
-	  	}
+		} else err();
   	}
 
   	delAllUsers(0);
