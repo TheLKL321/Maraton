@@ -1,5 +1,4 @@
-/*	Autor: Łukasz Zarębski
-*/
+//	Autor: Łukasz Zarębski
 
 #include "movieTree.h" // already includes stdlib.h and stdio.h
 #include <errno.h>
@@ -22,16 +21,16 @@ unsigned long extractUnsignedLong (char string[]){
 	return result;
 }
 
-unsigned int extractUnsignedInt (char string[]){
-	unsigned long fullValue = extractUnsignedLong(string);
-	if (fullValue == (unsigned long) -1 || fullValue > 65535) return -1;
-	else return (unsigned int) fullValue;
-}
-
 long extractLong (char string[]){
 	unsigned long fullValue = extractUnsignedLong(string);
 	if (fullValue == (unsigned long) -1 || fullValue > 2147483647) return -1;
 	else return (long) fullValue;
+}
+
+unsigned int extractUnsignedInt (char string[]){
+	long fullValue = extractLong(string);
+	if (fullValue > 65535) return -1;
+	else return (unsigned int) fullValue;
 }
 
 void finishLine(){
