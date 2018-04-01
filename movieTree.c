@@ -119,35 +119,32 @@ void delAllMovies (Movie *firstMovie){
 
 void delUser (unsigned int userId) {
 	if (userId != 0 && userPointers[userId]){
-		err();
-		return;
-	}
-		
-	User *userPtr = userPointers[userId];
-	User *leftUserPtr = userPtr->previousSiblingOrParent;
-	User *rightUserPtr = userPtr->nextSiblingOrParent;
-	User *firstKidPtr = userPtr->firstKid;
-	User *lastKidPtr = userPtr->lastKid;
-	delAllMovies(userPtr->firstMovie);
-	userPtr->firstMovie = NULL;
+		User *userPtr = userPointers[userId];
+		User *leftUserPtr = userPtr->previousSiblingOrParent;
+		User *rightUserPtr = userPtr->nextSiblingOrParent;
+		User *firstKidPtr = userPtr->firstKid;
+		User *lastKidPtr = userPtr->lastKid;
+		delAllMovies(userPtr->firstMovie);
+		userPtr->firstMovie = NULL;
 
-	if (firstKidPtr){
-		firstKidPtr->previousSiblingOrParent = leftUserPtr;
-		lastKidPtr->nextSiblingOrParent = rightUserPtr;
-	} else if (rightUserPtr != leftUserPtr){
-		firstKidPtr = rightUserPtr;
-		lastKidPtr = leftUserPtr;
-	}
+		if (firstKidPtr){
+			firstKidPtr->previousSiblingOrParent = leftUserPtr;
+			lastKidPtr->nextSiblingOrParent = rightUserPtr;
+		} else if (rightUserPtr != leftUserPtr){
+			firstKidPtr = rightUserPtr;
+			lastKidPtr = leftUserPtr;
+		}
 
-	if (leftUserPtr->firstKid == userPtr) leftUserPtr->firstKid = firstKidPtr;
-	else leftUserPtr->nextSiblingOrParent = firstKidPtr;
+		if (leftUserPtr->firstKid == userPtr) leftUserPtr->firstKid = firstKidPtr;
+		else leftUserPtr->nextSiblingOrParent = firstKidPtr;
 
-	if (rightUserPtr->lastKid == userPtr) rightUserPtr->lastKid = lastKidPtr;
-	else rightUserPtr->previousSiblingOrParent = lastKidPtr;
+		if (rightUserPtr->lastKid == userPtr) rightUserPtr->lastKid = lastKidPtr;
+		else rightUserPtr->previousSiblingOrParent = lastKidPtr;
 
-	userPointers[userId] = NULL;
-	free(userPtr);
-	ok();
+		userPointers[userId] = NULL;
+		free(userPtr);
+		ok();
+	} else err();
 }
 
 void delAllUsers(unsigned int userId){
