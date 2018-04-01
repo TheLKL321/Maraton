@@ -176,8 +176,7 @@ unsigned int getMaxI(Movie *movieLists[], unsigned int size){
 			if (tempMoviePtr->movieRating == maxRating) {
 				movieLists[j] = tempMoviePtr->nextMovie;
 				free(tempMoviePtr);
-			}
-			else if (tempMoviePtr->movieRating > maxRating){
+			} else if (tempMoviePtr->movieRating > maxRating){
 				maxRating = tempMoviePtr->movieRating;
 				maxI = j;
 			}
@@ -235,10 +234,7 @@ Movie *marathon (unsigned int userId, long k){
 		} else i = k;
 	}
 	
-
-	for (unsigned int i = 0; i < kidCount; ++i){
-		delAllMovies(movieLists[i]);
-	}
+	for (unsigned int i = 0; i < kidCount; ++i) delAllMovies(movieLists[i]);
 	
 	return resultMovieListStart;
 }
