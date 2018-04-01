@@ -166,6 +166,26 @@ void delAllUsers(unsigned int userId){
 	free(user);
 }
 
+unsigned int getMaxI(Movie *movieLists[], unsigned int size){
+	unsigned int maxI = -1;
+	long maxRating = -1;
+	for (unsigned int j = 0; j < size; ++j){
+		Movie *tempMoviePtr;
+		tempMoviePtr = movieLists[j];
+		if (tempMoviePtr){
+			if (tempMoviePtr->movieRating == maxRating) {
+				movieLists[j] = tempMoviePtr->nextMovie;
+				free(tempMoviePtr);
+			}
+			else if (tempMoviePtr->movieRating > maxRating){
+				maxRating = tempMoviePtr->movieRating;
+				maxI = j;
+			}
+		}
+	}
+	return maxI;
+}
+
 Movie *marathon (unsigned int userId, long k){
 	User *userPtr = userPointers[userId];
 
@@ -194,24 +214,9 @@ Movie *marathon (unsigned int userId, long k){
 
 	for (long i = 0; i < k; ++i){
 
-		unsigned int maxI;
-		long maxRating = -1;
-		for (unsigned int j = 0; j < kidCount; ++j){
-			Movie *tempMoviePtr;
-			tempMoviePtr = movieLists[j];
-			if (tempMoviePtr){
-				if (tempMoviePtr->movieRating == maxRating) {
-					movieLists[j] = tempMoviePtr->nextMovie;
-					free(tempMoviePtr);
-				}
-				else if (tempMoviePtr->movieRating > maxRating){
-					maxRating = tempMoviePtr->movieRating;
-					maxI = j;
-				}
-			}
-		}
+		unsigned int maxI = getMaxI(movieLists, kidCount);
 
-		if (maxRating > highestRating){
+		if (maxI != (unsigned int) -1 && movieLists[maxI]->movieRating > highestRating){
 			Movie *bestMoviePtr = movieLists[maxI];
 			movieLists[maxI] = movieLists[maxI]->nextMovie;
 			bestMoviePtr->nextMovie = NULL;
