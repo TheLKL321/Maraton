@@ -50,6 +50,9 @@ void addMovie (unsigned int userId, long movieRating) {
 		} else if (tempMoviePtr->movieRating < movieRating){
 			moviePtr->nextMovie = tempMoviePtr;
 			userPtr->firstMovie = moviePtr;
+		} else if (tempMoviePtr->movieRating == movieRating){
+			err();
+			return;
 		} else {
 			Movie *nextMoviePtr = tempMoviePtr->nextMovie;
 			while (nextMoviePtr && nextMoviePtr->movieRating > movieRating){
@@ -59,6 +62,9 @@ void addMovie (unsigned int userId, long movieRating) {
 			if (!nextMoviePtr || nextMoviePtr->movieRating != movieRating){
 				tempMoviePtr->nextMovie = moviePtr;
 				moviePtr->nextMovie = nextMoviePtr;
+			} else {
+				err();
+				return;
 			}
 		}
 
