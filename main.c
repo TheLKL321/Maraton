@@ -24,13 +24,13 @@ unsigned long extractUnsignedLong (char string[]){
 long extractLong (char string[]){
 	unsigned long fullValue = extractUnsignedLong(string);
 	if (fullValue == (unsigned long) -1 || fullValue > 2147483647) return -1;
-	else return (long) fullValue;
+	return (long) fullValue;
 }
 
 unsigned int extractUnsignedInt (char string[]){
 	long fullValue = extractLong(string);
 	if (fullValue > 65535) return -1;
-	else return (unsigned int) fullValue;
+	return (unsigned int) fullValue;
 }
 
 void finishLine(){
@@ -41,6 +41,7 @@ void finishLine(){
 // checks for length and double spaces
 bool ifCorrect(char string[]){
 	bool ifContainsEndline = false, ifContainsDoublespace = false;
+
 	ifContainsEndline = ifContainsEndline || string[0] == '\n';
 	for (int i = 1; i < (int) strlen(string); ++i){
 		ifContainsEndline = ifContainsEndline || string[i] == '\n';
@@ -56,43 +57,43 @@ bool ifCorrect(char string[]){
 void switchFunction (char line[]){
 
 	char *operation = strtok(line, " ");
-	char *firstArgument = strtok(NULL, " ");
 
 	if (strcmp(operation, "addMovie") == 0){
-		unsigned int userId = extractUnsignedInt(firstArgument);
+		unsigned int userId = extractUnsignedInt(strtok(NULL, " "));
 		long movieRating = extractLong(strtok(NULL, " "));
 		if (userId != (unsigned int) -1 && movieRating != -1 && strtok(NULL, "") == NULL){
 			addMovie(userId, movieRating);
 		} else err();
 
 	} else if (strcmp(operation, "delMovie") == 0){
-		unsigned int userId = extractUnsignedInt(firstArgument);
+		unsigned int userId = extractUnsignedInt(strtok(NULL, " "));
 		long movieRating = extractLong(strtok(NULL, " "));
 		if (userId != (unsigned int) -1 && movieRating != -1 && strtok(NULL, "") == NULL){
 			delMovie(userId, movieRating);
 		} else err();
 
 	} else if (strcmp(operation, "addUser") == 0){
-		unsigned int parentUserId = extractUnsignedInt(firstArgument);
+		unsigned int parentUserId = extractUnsignedInt(strtok(NULL, " "));
 		unsigned int userId = extractUnsignedInt(strtok(NULL, " "));
 		if (parentUserId != (unsigned int) -1 && userId != (unsigned int) -1 && strtok(NULL, "") == NULL){
 			addUser(parentUserId, userId);
 		} else err();
 
 	} else if (strcmp(operation, "delUser") == 0){
-		unsigned int userId = extractUnsignedInt(firstArgument);
+		unsigned int userId = extractUnsignedInt(strtok(NULL, " "));
 		if (userId != (unsigned int) -1 && strtok(NULL, "") == NULL){
 			delUser(userId);
 		} else err();
 
 	} else if (strcmp(operation, "marathon") == 0){
-		unsigned int userId = extractUnsignedInt(firstArgument);
+		unsigned int userId = extractUnsignedInt(strtok(NULL, " "));
 		long k = extractLong(strtok(NULL, " "));
 		if (userId != (unsigned int) -1 && k != -1 && strtok(NULL, "") == NULL){
+
 			Movie *resultListStart = marathon(userId, k);
 			Movie *resultList = resultListStart;
 
-			if (resultList->movieRating != -2) {
+			if (resultList) {
 				resultList = resultList->nextMovie;
 				if (resultList){
 					long i = 0;
@@ -105,6 +106,7 @@ void switchFunction (char line[]){
 				} else printf("%s\n", "NONE");
 				delAllMovies(resultListStart);
 			} else err();
+
 		} else err();
 	} else err();
 }

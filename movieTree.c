@@ -197,10 +197,7 @@ Movie *marathon (unsigned int userId, long k){
 	resultMovieListStart->nextMovie = NULL;
 	Movie *resultMovieListEnd = resultMovieListStart;
 
-	if (!userPtr){
-		resultMovieListStart->movieRating = -2;
-		return resultMovieListStart;
-	}
+	if (!userPtr) return NULL;
 
 	unsigned int kidCount = countKids(userId);
 	Movie *movieLists[kidCount]; // an array of pointers to a current pointer to movie
