@@ -1,12 +1,11 @@
 CC=gcc
-CFLAGS= -Wall -Wextra -std=c11
-DEPS = userTree.h
+CFLAGS= -Wall -Wextra -std=c11 -O2
 
-%.o: %.c $(DEPS)
+%.o: %.c 
 	$(CC) -c $< $(CFLAGS)
 
-main: main.o userTree.o 
-	gcc -o main main.o userTree.o
+main: main.o movieTree.o
+	gcc -o main main.o movieTree.o
 
 clean:
 	-rm main *.o
