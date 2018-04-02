@@ -96,6 +96,13 @@ void delMovie (unsigned int userId, long movieRating) {
 	else err();
 }
 
+void delAllMovies (Movie *firstMovie) {
+	if (firstMovie) {
+		delAllMovies(firstMovie->nextMovie);
+		free(firstMovie);
+	}
+}
+
 void addUser (unsigned int parentUserId, unsigned int userId) {
 	if (!userPointers[userId] && userPointers[parentUserId]) {
 		User *parentPtr = userPointers[parentUserId];
@@ -120,13 +127,6 @@ void addUser (unsigned int parentUserId, unsigned int userId) {
 		ok();
 	} 
 	else err();
-}
-
-void delAllMovies (Movie *firstMovie) {
-	if (firstMovie) {
-		delAllMovies(firstMovie->nextMovie);
-		free(firstMovie);
-	}
 }
 
 void delUser (unsigned int userId) {

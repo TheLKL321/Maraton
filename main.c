@@ -59,7 +59,7 @@ bool ifCorrect(char string[]) {
 	return ifContainsEndline && !ifContainsDoublespace;
 }
 
-//checks if the input is correct, and calls the adequate function
+//checks if the input is correct, and calls adequate function
 void switchFunction (char line[]) {
 	char *operation = strtok(line, " ");
 
