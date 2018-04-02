@@ -3,12 +3,12 @@
 pass=0
 fail=0
 
-for f in testy/*.in
+for f in $2/*.in
 do
 	TMPFILE1="$(mktemp)"
 	TMPFILE2="$(mktemp)"
 
-	./main <$f >$TMPFILE1 2>$TMPFILE2
+	./$1 <$f >$TMPFILE1 2>$TMPFILE2
 
   	if diff ${f%in}out $TMPFILE1
 	then
