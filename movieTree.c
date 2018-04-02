@@ -37,6 +37,7 @@ static unsigned int countKids (unsigned int userId) {
 	return result;
 }
 
+// adds a new Movie at the start of a movie list and returns the new start of the list
 static Movie *placeMovie (long movieRating, Movie *nextMoviePtr){
 	Movie *moviePtr = (Movie*) calloc(1, sizeof(Movie));
 	if (!moviePtr)
@@ -48,10 +49,17 @@ static Movie *placeMovie (long movieRating, Movie *nextMoviePtr){
 	return moviePtr;
 }
 
-void addMovie (unsigned int userId, long movieRating) {
-	if (userPointers[userId]) {
-		User *userPtr = userPointers[userId];
+// adds a Movie at the end of a movie list and returns the new end of the list
+static Movie *addToList(Movie *movieListEnd, Movie *moviePtr) {
+	moviePtr->nextMovie = NULL;
+	movieListEnd->nextMovie = moviePtr;
+	return moviePtr;
+}
 
+void addMovie (unsigned int userId, long movieRating) {
+	User *userPtr = userPointers[userId];
+
+	if (userPtr) {
 		Movie *tempMoviePtr = userPtr->firstMovie;
 		if (!tempMoviePtr || tempMoviePtr->movieRating < movieRating) {
 			userPtr->firstMovie = placeMovie(movieRating, tempMoviePtr);
@@ -78,7 +86,6 @@ void addMovie (unsigned int userId, long movieRating) {
 }
 
 void delMovie (unsigned int userId, long movieRating) {
-
 	User *userPtr = userPointers[userId];
 
 	if (userPtr && userPtr->firstMovie) {
@@ -196,6 +203,8 @@ void delAllUsers(unsigned int userId) {
 	free(user);
 }
 
+// finds index of a movie list (from movieLists) which first movie has the 
+// highest movieRating 
 unsigned int getMaxI(Movie *movieLists[], unsigned int size) {
 	unsigned int maxI = -1;
 	long maxRating = -1;
@@ -216,13 +225,6 @@ unsigned int getMaxI(Movie *movieLists[], unsigned int size) {
 	}
 
 	return maxI;
-}
-
-// adds a Movie at the end of a movie list and returns the new end of the list
-static Movie *addToList(Movie *movieListEnd, Movie *moviePtr) {
-	moviePtr->nextMovie = NULL;
-	movieListEnd->nextMovie = moviePtr;
-	return moviePtr;
 }
 
 Movie *marathon (unsigned int userId, long k) {
