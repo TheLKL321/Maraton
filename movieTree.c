@@ -10,8 +10,15 @@ static void ok () {
 	printf("OK\n");
 }
 
+static void memExit (){
+	delAllUsers(0);
+	exit(1);
+}
+
 void createHost () {
 	User *hostPtr = (User*) calloc(1, sizeof(User));
+	if (!hostPtr)
+		exit(1);
 	hostPtr->userId = 0;
 	userPointers[0] = hostPtr;
 }
@@ -30,8 +37,11 @@ static unsigned int countKids (unsigned int userId) {
 	return result;
 }
 
-Movie *placedMovie (long movieRating, Movie *nextMoviePtr){
+static Movie *placeMovie (long movieRating, Movie *nextMoviePtr){
 	Movie *moviePtr = (Movie*) calloc(1, sizeof(Movie));
+	if (!moviePtr)
+		memExit();
+	
 	moviePtr->movieRating = movieRating;
 	moviePtr->nextMovie = nextMoviePtr;
 
@@ -44,7 +54,7 @@ void addMovie (unsigned int userId, long movieRating) {
 
 		Movie *tempMoviePtr = userPtr->firstMovie;
 		if (!tempMoviePtr || tempMoviePtr->movieRating < movieRating) {
-			userPtr->firstMovie = placedMovie(movieRating, tempMoviePtr);
+			userPtr->firstMovie = placeMovie(movieRating, tempMoviePtr);
 			ok();
 		} 
 		else if (tempMoviePtr->movieRating != movieRating) {
@@ -55,7 +65,7 @@ void addMovie (unsigned int userId, long movieRating) {
 			}
 
 			if (!nextMoviePtr || nextMoviePtr->movieRating != movieRating) {
-				tempMoviePtr->nextMovie = placedMovie(movieRating, nextMoviePtr);
+				tempMoviePtr->nextMovie = placeMovie(movieRating, nextMoviePtr);
 				ok();
 			} 
 			else err();
@@ -108,6 +118,8 @@ void addUser (unsigned int parentUserId, unsigned int userId) {
 		User *parentPtr = userPointers[parentUserId];
 
 		User *newUserPtr = (User*) calloc(1, sizeof(User));
+		if (!newUserPtr)
+			memExit();
 		newUserPtr->userId = userId;
 		newUserPtr->previousSiblingOrParent = parentPtr;
 		userPointers[userId] = newUserPtr;
@@ -206,10 +218,19 @@ unsigned int getMaxI(Movie *movieLists[], unsigned int size) {
 	return maxI;
 }
 
+// adds a Movie at the end of a movie list and returns the new end of the list
+static Movie *addToList(Movie *movieListEnd, Movie *moviePtr) {
+	moviePtr->nextMovie = NULL;
+	movieListEnd->nextMovie = moviePtr;
+	return moviePtr;
+}
+
 Movie *marathon (unsigned int userId, long k) {
 	User *userPtr = userPointers[userId];
 	
 	Movie *resultMovieListStart = (Movie*) calloc(1, sizeof(Movie)); 
+	if (!resultMovieListStart)
+		memExit();
 	resultMovieListStart->movieRating = -1; // first movie is a dummy movie
 	Movie *resultMovieListEnd = resultMovieListStart;
 
@@ -246,18 +267,16 @@ Movie *marathon (unsigned int userId, long k) {
 
 			Movie *bestMoviePtr = movieLists[maxI];
 			movieLists[maxI] = movieLists[maxI]->nextMovie;
-			bestMoviePtr->nextMovie = NULL;
-			resultMovieListEnd->nextMovie = bestMoviePtr;
-			resultMovieListEnd = bestMoviePtr;
+			resultMovieListEnd = addToList(resultMovieListEnd, bestMoviePtr);
 		} 
 		else if (userMovieList) {
 			while(userMovieList && i < k) {
 				Movie *bestMoviePtr = (Movie*) calloc(1, sizeof(Movie));
+				if (!bestMoviePtr)
+					memExit();
 				*bestMoviePtr = *userMovieList;
 				userMovieList = userMovieList->nextMovie;
-				bestMoviePtr->nextMovie = NULL;
-				resultMovieListEnd->nextMovie = bestMoviePtr;
-				resultMovieListEnd = bestMoviePtr;
+				resultMovieListEnd = addToList(resultMovieListEnd, bestMoviePtr);
 				i++;
 			}
 		} 
