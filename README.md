@@ -11,8 +11,8 @@ Program ma wykonywać następujące operacje:
 - `addMovie <userId> <movieRating>` – Użytkownik o identyfikatorze `userId` dodaje film o identyfikatorze `movieRating` do swoich preferencji filmowych. Operacja ma się wykonywać w czasie co najwyżej liniowym względem liczby preferencji użytkownika, który dodaje film.
 - `delMovie <userId> <movieRating>` – Użytkownik o identyfikatorze `userId` usuwa film o identyfikatorze `movieRating` ze swoich preferencji filmowych. Operacja ma się wykonywać w czasie co najwyżej liniowym względem liczby preferencji użytkownika, który usuwa film.
 - `marathon <userId> <k>` – Wyznacza co najwyżej `k` identyfikatorów filmów o najwyższych ocenach spośród:
-  -własnych preferencji filmowych użytkownika o identyfikatorze userId;
-  -preferencji filmowych wyodrębnionych w wyniku przeprowadzenia operacji marathon dla każdego z potomków użytkownika userId, przy czym w wynikowej grupie k filmów znajdą się tylko takie, które mają ocenę większą od maksymalnej oceny filmu spośród preferencji użytkownika userId.
+  - własnych preferencji filmowych użytkownika o identyfikatorze userId;
+  - preferencji filmowych wyodrębnionych w wyniku przeprowadzenia operacji marathon dla każdego z potomków użytkownika userId, przy czym w wynikowej grupie k filmów znajdą się tylko takie, które mają ocenę większą od maksymalnej oceny filmu spośród preferencji użytkownika userId.
   Operacja ma się wykonywać w czasie liniowym względem iloczynu parametru k i liczby użytkowników, dla których rekurencyjnie wyliczana jest ta operacja.
 
 ## Dane wejściowe
